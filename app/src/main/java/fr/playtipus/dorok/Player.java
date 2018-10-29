@@ -15,21 +15,16 @@ public class Player {
     //boolean variable to track the ship is boosting or not
     private boolean boosting;
 
-    //Gravity Value to add gravity effect on the ship
-    private final int GRAVITY = -10;
-
     //Controlling Y coordinate so that ship won't go outside the screen
     private int maxY;
     private int minY;
 
     //Limit the bounds of the ship's speed
-    private final int MIN_SPEED = 1;
+    private final int MIN_SPEED = 0;
     private final int MAX_SPEED = 20;
 
     public Player(Context context, int screenX, int screenY) {
-        x = 75;
-        y = 50;
-        speed = 1;
+        speed = 3;
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
@@ -38,6 +33,9 @@ public class Player {
 
         //top edge's y point is 0 so min y will always be zero
         minY = 0;
+
+        x = screenX / 2 - bitmap.getHeight() / 2;
+        y = screenY / 2 - bitmap.getWidth() / 2;
 
         boosting = false;
     }
@@ -71,9 +69,6 @@ public class Player {
             speed = MIN_SPEED;
         }
 
-        //moving the ship down
-        y -= speed + GRAVITY;
-
         //but controlling it also so that it won't go off the screen
         if (y < minY) {
             y = minY;
@@ -84,7 +79,7 @@ public class Player {
     }
 
     /*
-     * These are getters you can generate it autmaticallyl
+     * These are getters you can generate it automatically
      * right click on editor -> generate -> getters
      * */
     public Bitmap getBitmap() {

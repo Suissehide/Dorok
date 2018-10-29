@@ -7,6 +7,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
+import java.util.Arrays;
+
+import android.util.Log;
 
 public class GameView extends SurfaceView implements Runnable {
 
@@ -17,6 +20,10 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
+
+    private static final String TAG = "GameView";
+    float initialX, initialY;
+    int dir[] = {0,0,0,0};
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -88,10 +95,48 @@ public class GameView extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_UP:
+                float finalX = motionEvent.getX();
+                float finalY = motionEvent.getY();
+
+                if (initialY > finalY) {
+                    Log.d(TAG, "Down to Up swipe performed");
+                    dir[0] = 1;
+                }
+                if (initialX < finalX) {
+                    Log.d(TAG, "Left to Right swipe performed");
+                    dir[1] = 1;
+                }
+                if (initialY < finalY) {
+                    Log.d(TAG, "Up to Down swipe performed");
+                    dir[2] = 1;
+                }
+                if (initialX > finalX) {
+                    Log.d(TAG, "Right to Left swipe performed");
+                    dir[3] = 1;
+                }
+
                 player.stopBoosting();
+
+                //reset dir
+                Arrays.fill(dir, 0);
+
                 break;
+
             case MotionEvent.ACTION_DOWN:
                 player.setBoosting();
+                initialX = motionEvent.getX();
+                initialY = motionEvent.getY();
+
+                break;
+            case MotionEvent.ACTION_MOVE:
+
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                Log.d(TAG,"Action was CANCEL");
+                break;
+
+            case MotionEvent.ACTION_OUTSIDE:
+                Log.d(TAG, "Movement occurred outside bounds of current screen element");
                 break;
         }
         return true;
