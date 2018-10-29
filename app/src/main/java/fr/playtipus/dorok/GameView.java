@@ -18,10 +18,10 @@ public class GameView extends SurfaceView implements Runnable {
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
 
-    public GameView(Context context) {
+    public GameView(Context context, int screenX, int screenY) {
         super(context);
 
-        player = new Player(context);
+        player = new Player(context, screenX, screenY);
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -88,10 +88,10 @@ public class GameView extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_UP:
-
+                player.stopBoosting();
                 break;
             case MotionEvent.ACTION_DOWN:
-
+                player.setBoosting();
                 break;
         }
         return true;
