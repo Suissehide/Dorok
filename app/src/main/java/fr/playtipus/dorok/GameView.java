@@ -22,8 +22,8 @@ public class GameView extends SurfaceView implements Runnable {
     private SurfaceHolder surfaceHolder;
 
     private static final String TAG = "GameView";
-    float initialX, initialY;
-    int dir[] = {0,0,0,0};
+    private float initialX, initialY;
+    private int[] dir;
 
     public GameView(Context context, int screenX, int screenY) {
         super(context);
@@ -33,6 +33,8 @@ public class GameView extends SurfaceView implements Runnable {
         //initializing drawing objects
         surfaceHolder = getHolder();
         paint = new Paint();
+
+        dir = new int[4];
     }
 
     @Override
@@ -114,8 +116,7 @@ public class GameView extends SurfaceView implements Runnable {
                     Log.d(TAG, "Right to Left swipe performed");
                     dir[3] = 1;
                 }
-
-                player.stopBoosting();
+                player.setDir(dir);
 
                 //reset dir
                 Arrays.fill(dir, 0);
@@ -123,7 +124,6 @@ public class GameView extends SurfaceView implements Runnable {
                 break;
 
             case MotionEvent.ACTION_DOWN:
-                player.setBoosting();
                 initialX = motionEvent.getX();
                 initialY = motionEvent.getY();
 
