@@ -3,6 +3,9 @@ package fr.playtipus.dorok;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import java.util.Arrays;
+
+import android.util.Log;
 
 public class Player {
 
@@ -12,23 +15,20 @@ public class Player {
     private int speed;
 
     //boolean variable to track the ship is boosting or not
-    private boolean boosting;
-
-    //Gravity Value to add gravity effect on the ship
-    private final int GRAVITY = -10;
+    private boolean moving;
+    private int startY;
+    private int startX;
+    private int[] dir;
 
     //Controlling Y coordinate so that ship won't go outside the screen
     private int maxY;
     private int minY;
 
-    //Limit the bounds of the ship's speed
-    private final int MIN_SPEED = 1;
-    private final int MAX_SPEED = 20;
+    private static final String TAG = "Player";
 
     public Player(Context context, int screenX, int screenY) {
-        x = 75;
-        y = 50;
-        speed = 1;
+        speed = 10;
+        dir = new int[4];
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
@@ -38,40 +38,63 @@ public class Player {
         //top edge's y point is 0 so min y will always be zero
         minY = 0;
 
-        boosting = false;
+        x = screenX / 2 - bitmap.getHeight() / 2;
+        y = screenY / 2 - bitmap.getWidth() / 2;
+
+        moving = false;
     }
 
-    //setting boosting true
-    public void setBoosting() {
-        boosting = true;
+    private boolean checkMovements(int[] array) {
+        boolean check = false;
+
+        for (int i = 0; i < 4; i ++) {
+            if (array[i] != 0) {
+                check = true;
+            }
+        }
+        return check;
     }
 
-    //setting boosting false
-    public void stopBoosting() {
-        boosting = false;
+    public void setDir(int[] playerDir) {
+        System.arraycopy(playerDir, 0, dir, 0, 4);
     }
 
     public void update() {
-        //if the ship is boosting
-        if (boosting) {
-            //speeding up the ship
-            speed += 2;
-        } else {
-            //slowing down if not boosting
-            speed -= 5;
-        }
-        //controlling the top speed
-        if (speed > MAX_SPEED) {
-            speed = MAX_SPEED;
-        }
-        //if the speed is less than min speed
-        //controlling it so that it won't stop completely
-        if (speed < MIN_SPEED) {
-            speed = MIN_SPEED;
+
+        int tileSizeX = 64;
+        int tileSizeY = 64;
+
+        //Log.d(TAG, "X = " + dir[0] + " Y = " + dir[1]);
+
+        if (checkMovements(dir) && !moving) {
+            moving = true;
+            startX = x;
+            startY = y;
         }
 
-        //moving the ship down
-        y -= speed + GRAVITY;
+        if (moving) {
+            if (Math.abs(x - startX) > tileSizeX || Math.abs(y - startY) > tileSizeY) {
+                Arrays.fill(dir, 0);
+                moving = false;
+            }
+            //Log.d(TAG, "arr: " + Arrays.toString(dir));
+            if (dir[0] == 1 && dir[1] == 1) { //top right
+                x += speed;
+                y -= speed;
+            }
+            else if (dir[0] == 1 && dir[3] == 1) { //top left
+                x -= speed;
+                y -= speed;
+            }
+            else if (dir[2] == 1 && dir[1] == 1) { //bottom right
+                x += speed;
+                y += speed;
+            }
+            else if (dir[2] == 1 && dir[3] == 1) { //bottom left
+                x -= speed;
+                y += speed;
+            }
+        }
 
         //but controlling it also so that it won't go off the screen
         if (y < minY) {
@@ -82,10 +105,6 @@ public class Player {
         }
     }
 
-    /*
-     * These are getters you can generate it autmaticallyl
-     * right click on editor -> generate -> getters
-     * */
     public Bitmap getBitmap() {
         return bitmap;
     }
