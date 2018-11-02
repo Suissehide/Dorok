@@ -17,6 +17,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Thread gameThread = null;
 
     private Player player;
+    private Map map;
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
@@ -29,6 +30,7 @@ public class GameView extends SurfaceView implements Runnable {
         super(context);
 
         player = new Player(context, screenX, screenY);
+        map = new Map(context, screenX, screenY);
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -59,6 +61,7 @@ public class GameView extends SurfaceView implements Runnable {
             canvas.drawColor(Color.BLACK);
             //Drawing the player
             canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+            canvas.drawBitmap(map.getBitmap(), 0, 0,paint);
             //Unlocking the canvas
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
