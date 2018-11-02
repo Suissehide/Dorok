@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 public class Player {
 
     private Bitmap bitmap;
-    private Texture texture;
     private int x;
     private int y;
     private int speed;
