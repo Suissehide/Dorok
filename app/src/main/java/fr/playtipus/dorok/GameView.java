@@ -54,22 +54,32 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void draw() {
-        int x = 100;
+        int i = 0;
+        int j = 0;
+        int size = 7;
+        int x = 100 * (-(size-1)/2);
+        int y = 0;
+
         if (surfaceHolder.getSurface().isValid()) {
             //locking the canvas
             canvas = surfaceHolder.lockCanvas();
             //drawing a background color for canvas
             canvas.drawColor(Color.BLACK);
             //drawing the map
-            canvas.drawBitmap(map.getBitmap(), map.getX(), map.getY(), paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX() - x, map.getY(), paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX() -  x/2, map.getY() - x/2, paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX(), map.getY() - x, paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX() + x/2 , map.getY() - x/2, paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX() + x, map.getY(), paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX() + x/2 , map.getY() + x/2, paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX(), map.getY() + x, paint);
-            canvas.drawBitmap(map.getBitmap(), map.getX() - x/2, map.getY() + x/2, paint);
+
+            while (j < size){
+                while (i < size){
+                    canvas.drawBitmap(map.getBitmap(), map.getX() + x, map.getY() + y, paint);
+                    x += 100/2;
+                    y -= 100/2;
+                    i += 1;
+                }
+                i = 0;
+                j += 1;
+                x = 100 * (-(size-1)/2) + j* 100/2;
+                y = j * 100/2;
+            }
+
             //Drawing the player
             canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
             //Unlocking the canvas
