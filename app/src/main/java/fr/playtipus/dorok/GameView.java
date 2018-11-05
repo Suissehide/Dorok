@@ -56,9 +56,9 @@ public class GameView extends SurfaceView implements Runnable {
     private void draw() {
         int i = 0;
         int j = 0;
-        int size = 7;
-        int x = 100 * (-(size-1)/2);
-        int y = 0;
+        int size = 3;
+        int x = 0;
+        int y = 80 *  (-(size - 1)/2);
 
         if (surfaceHolder.getSurface().isValid()) {
             //locking the canvas
@@ -70,14 +70,14 @@ public class GameView extends SurfaceView implements Runnable {
             while (j < size){
                 while (i < size){
                     canvas.drawBitmap(map.getBitmap(), map.getX() + x, map.getY() + y, paint);
-                    x += 100/2;
-                    y -= 100/2;
+                    x -= 100/2;
+                    y += 80/2;
                     i += 1;
                 }
                 i = 0;
                 j += 1;
-                x = 100 * (-(size-1)/2) + j* 100/2;
-                y = j * 100/2;
+                x = j * 100/2;
+                y = 80 * (-(size-1)/2) + j * 80/2;
             }
 
             //Drawing the player
