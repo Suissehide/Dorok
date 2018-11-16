@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 import java.util.Arrays;
+import java.util.List;
 
 import android.util.Log;
 
@@ -15,6 +16,9 @@ public class GameView extends SurfaceView implements Runnable {
 
     volatile boolean playing;
     private Thread gameThread = null;
+    public static final String mPath = "test.txt";
+    private Readfiles mReadfiles;
+    private List<String> mLines;
 
     private Player player;
     private Map map;
@@ -29,6 +33,11 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context, int screenX, int screenY) {
         super(context);
 
+
+        //mReadfiles = new Readfiles(this);
+        //mLines = mReadfiles.readLine(mPath);
+        //for (String string : mLines)
+         //   Log.d(TAG, string);
         player = new Player(context, screenX, screenY);
         map = new Map(context, screenX, screenY);
 

@@ -5,15 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.view.SurfaceHolder;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Color;
-import java.util.Arrays;
 
 public class Map {
 
@@ -22,7 +13,7 @@ public class Map {
     private int y;
 
     public Map(Context context, int screenX, int screenY) {
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
         x = screenX / 2 - bitmap.getHeight() / 2;
