@@ -13,7 +13,7 @@ public class Map {
     private int y;
 
     public Map(Context context, int screenX, int screenY) {
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
         x = screenX / 2 - bitmap.getHeight() / 2;

@@ -5,11 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.util.Arrays;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.Log;
 
 public class Player {
 
     private Bitmap bitmap;
+    private Animation animation;
     private int x;
     private int y;
     private int speed;
@@ -30,16 +33,19 @@ public class Player {
         speed = 10;
         dir = new int[4];
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
-        bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
+        //bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
+
+        animation = new Animation(bitmap, new int[]{10, 0, 5, 0}, 70, 220);
 
         //calculating maxY
         maxY = screenY - bitmap.getHeight();
-
         //top edge's y point is 0 so min y will always be zero
         minY = 0;
 
-        x = screenX / 2 - bitmap.getHeight() / 2;
-        y = screenY / 2 - bitmap.getWidth() / 2;
+        x = screenX / 2;
+        y = screenY / 2;
+        //x = screenX / 2 - bitmap.getHeight() / 2;
+        //y = screenY / 2 - bitmap.getWidth() / 2;
 
         moving = false;
     }
@@ -95,14 +101,11 @@ public class Player {
                 y += speed;
             }
         }
+    }
 
-        //but controlling it also so that it won't go off the screen
-        if (y < minY) {
-            y = minY;
-        }
-        if (y > maxY) {
-            y = maxY;
-        }
+    public void draw(Canvas canvas, Paint paint) {
+        //Log.d(TAG, Integer.toString(x) + ", " + Integer.toString(y));
+        animation.draw(canvas, x, y, paint);
     }
 
     public Bitmap getBitmap() {

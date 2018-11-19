@@ -15,6 +15,10 @@ import android.util.Log;
 public class GameView extends SurfaceView implements Runnable {
 
     volatile boolean playing;
+
+    long fps;
+    private long timeThisFrame;
+
     private Thread gameThread = null;
     public static final String mPath = "test.txt";
     private Readfiles mReadfiles;
@@ -33,7 +37,6 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context, int screenX, int screenY) {
         super(context);
 
-
         //mReadfiles = new Readfiles(this);
         //mLines = mReadfiles.readLine(mPath);
         //for (String string : mLines)
@@ -51,9 +54,17 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (playing) {
+            // Capture the current time in milliseconds in startFrameTime
+            long startFrameTime = System.currentTimeMillis();
+
             update();
             draw();
             control();
+
+            timeThisFrame = System.currentTimeMillis() - startFrameTime;
+            if (timeThisFrame >= 1) {
+                fps = 1000 / timeThisFrame;
+            }
         }
     }
 
@@ -72,7 +83,13 @@ public class GameView extends SurfaceView implements Runnable {
             //drawing the map
             map.drawMap(canvas, paint);
             //Drawing the player
-            canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+            player.draw(canvas, paint);
+            //canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+
+            paint.setColor(Color.argb(255,  249, 129, 0));
+            paint.setTextSize(45);
+            canvas.drawText("FPS:" + fps, 20, 40, paint);
+
             //Unlocking the canvas
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
