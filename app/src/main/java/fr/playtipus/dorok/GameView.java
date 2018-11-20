@@ -37,10 +37,10 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context, int screenX, int screenY) {
         super(context);
 
-        //mReadfiles = new Readfiles(this);
-        //mLines = mReadfiles.readLine(mPath);
-        //for (String string : mLines)
-         //   Log.d(TAG, string);
+        mReadfiles = new Readfiles(context);
+        mLines = mReadfiles.readLine(mPath);
+        for (String string : mLines)
+            Log.d(TAG, string);
         player = new Player(context, screenX, screenY);
         map = new Map(context, screenX, screenY);
 
