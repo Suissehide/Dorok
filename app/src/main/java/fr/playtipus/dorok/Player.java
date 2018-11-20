@@ -35,7 +35,7 @@ public class Player {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
         //bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
-        animation = new Animation(bitmap, new int[]{10, 0, 5, 0}, 70, 220);
+        animation = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 1);
 
         //calculating maxY
         maxY = screenY - bitmap.getHeight();
