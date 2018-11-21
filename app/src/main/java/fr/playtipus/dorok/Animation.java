@@ -11,7 +11,9 @@ public class Animation {
 
     private Bitmap bmp;
     private long lastTime = 0;
-    private int frameLength = 500;
+    private int frameLength = 100;
+    private int reverse;
+    private int backtrace = 0;
 
     private int start_row;
     private int start_col;
@@ -26,7 +28,7 @@ public class Animation {
     private static final String TAG = "Animation";
 
     // grid 0: start_row, 1: start_col, 2:end_row, 3: end_col
-    public Animation(Bitmap bmp, int[] grid, int width, int height) {
+    public Animation(Bitmap bmp, int[] grid, int width, int height, int frameLength, int reverse) {
         this.bmp = bmp;
         this.start_row = grid[0];
         this.start_col = grid[1];
@@ -34,19 +36,55 @@ public class Animation {
         this.cols = grid[3];
         this.width = width;
         this.height = height;
+        this.reverse = reverse;
+        this.frameLength = frameLength;
     }
 
-    private void update() {
-        long time = System.currentTimeMillis();
-        if (time > lastTime + frameLength) {
+    private void normalUpdate() {
+        if (currentFrameX < rows) {
+            currentFrameX += 1;
+        } else if (currentFrameY < cols) {
+            currentFrameY += 1;
+            currentFrameX = 0;
+        } else {
+            currentFrameY = 0;
+            currentFrameX = 0;
+        }
+    }
+
+    private void reverseUpdate() {
+
+        if (backtrace == 0) {
             if (currentFrameX < rows) {
                 currentFrameX += 1;
             } else if (currentFrameY < cols) {
                 currentFrameY += 1;
                 currentFrameX = 0;
             } else {
-                currentFrameY = 0;
-                currentFrameX = 0;
+                backtrace = 1;
+            }
+        }
+        if (backtrace == 1) {
+            if (currentFrameX > 0) {
+                currentFrameX -= 1;
+            } else if (currentFrameY > 0) {
+                currentFrameY -= 1;
+                currentFrameX = rows;
+            }
+            if (currentFrameX <= 0 && currentFrameY <= 0) {
+                backtrace = 0;
+            }
+        }
+    }
+
+    private void update() {
+        long time = System.currentTimeMillis();
+
+        if (time > lastTime + frameLength) {
+            if (reverse == 0) {
+                normalUpdate();
+            } else {
+                reverseUpdate();
             }
             lastTime = time;
         }
