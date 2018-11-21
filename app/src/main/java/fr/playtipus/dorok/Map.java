@@ -5,14 +5,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
+
+import java.util.List;
 
 public class Map {
 
+
+    public static final String mPath = "2.txt";
+    private Readfiles mReadfiles;
+    private List<String> mLines;
+    private static final String TAG = "GameView";
     private Bitmap bitmap;
     private int x;
     private int y;
 
     public Map(Context context, int screenX, int screenY) {
+        mReadfiles = new Readfiles(context);
+        mLines = mReadfiles.readLine(mPath);
+        for (String string : mLines)
+            Log.d(TAG, string);
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
@@ -35,7 +47,7 @@ public class Map {
     public void drawMap(Canvas canvas, Paint paint) {
         int i = 0;
         int j = 0;
-        int size = 3;
+        int size = 1;
         int x = 0;
         int y = 80 *  (-(size - 1)/2);
 
