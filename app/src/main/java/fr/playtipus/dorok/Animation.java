@@ -11,9 +11,9 @@ public class Animation {
 
     private Bitmap bmp;
     private long lastTime = 0;
-    private int frameLength = 500;
-    private int reverse = 0;
-    private int backtrace = 1;
+    private int frameLength = 100;
+    private int reverse;
+    private int backtrace = 0;
 
     private int start_row;
     private int start_col;
@@ -28,7 +28,7 @@ public class Animation {
     private static final String TAG = "Animation";
 
     // grid 0: start_row, 1: start_col, 2:end_row, 3: end_col
-    public Animation(Bitmap bmp, int[] grid, int width, int height, int reverse) {
+    public Animation(Bitmap bmp, int[] grid, int width, int height, int frameLength, int reverse) {
         this.bmp = bmp;
         this.start_row = grid[0];
         this.start_col = grid[1];
@@ -37,6 +37,7 @@ public class Animation {
         this.width = width;
         this.height = height;
         this.reverse = reverse;
+        this.frameLength = frameLength;
     }
 
     private void normalUpdate() {
@@ -52,17 +53,27 @@ public class Animation {
     }
 
     private void reverseUpdate() {
-        if (currentFrameY >= cols && currentFrameX >= rows) {
-            backtrace = -1;
-        }
-        if (currentFrameY == 0 && currentFrameX == 0) {
-            backtrace = 1;
-        }
 
-        if (currentFrameX < rows) {
-            currentFrameX += backtrace;
-        } else if (currentFrameY < cols) {
-            currentFrameY += backtrace;
+        if (backtrace == 0) {
+            if (currentFrameX < rows) {
+                currentFrameX += 1;
+            } else if (currentFrameY < cols) {
+                currentFrameY += 1;
+                currentFrameX = 0;
+            } else {
+                backtrace = 1;
+            }
+        }
+        if (backtrace == 1) {
+            if (currentFrameX > 0) {
+                currentFrameX -= 1;
+            } else if (currentFrameY > 0) {
+                currentFrameY -= 1;
+                currentFrameX = rows;
+            }
+            if (currentFrameX <= 0 && currentFrameY <= 0) {
+                backtrace = 0;
+            }
         }
     }
 
