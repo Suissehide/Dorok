@@ -12,7 +12,8 @@ import android.util.Log;
 public class Player {
 
     private Bitmap bitmap;
-    private Animation animation;
+    private Animation[] animation;
+    private int currentAnimation = 0;
     private int x;
     private int y;
     private int speed;
@@ -34,9 +35,11 @@ public class Player {
         dir = new int[4];
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
         //bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
-
-        animation = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
-
+        animation[0] = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
+        animation[1] = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
+        animation[2] = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
+        animation[3] = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
+        animation[4] = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
         //calculating maxY
         maxY = screenY - bitmap.getHeight();
         //top edge's y point is 0 so min y will always be zero
@@ -87,25 +90,31 @@ public class Player {
             if (dir[0] == 1 && dir[1] == 1) { //top right
                 x += speed;
                 y -= speed;
+                currentAnimation = 1;
             }
             else if (dir[0] == 1 && dir[3] == 1) { //top left
                 x -= speed;
                 y -= speed;
+                currentAnimation = 2;
             }
             else if (dir[2] == 1 && dir[1] == 1) { //bottom right
                 x += speed;
                 y += speed;
+                currentAnimation = 3;
             }
             else if (dir[2] == 1 && dir[3] == 1) { //bottom left
                 x -= speed;
                 y += speed;
+                currentAnimation = 4;
+            } else {
+                currentAnimation = 0;
             }
         }
     }
 
     public void draw(Canvas canvas, Paint paint) {
         //Log.d(TAG, Integer.toString(x) + ", " + Integer.toString(y));
-        animation.draw(canvas, x, y, paint);
+        animation[currentAnimation].draw(canvas, x, y, paint);
     }
 
     public Bitmap getBitmap() {
