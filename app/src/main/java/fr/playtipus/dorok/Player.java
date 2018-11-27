@@ -11,8 +11,10 @@ import android.util.Log;
 
 public class Player {
 
-    private Bitmap bitmap;
-    private Animation animation;
+    private Sprite sprite;
+    private Sprite spriteFlip;
+    private Animation[] animation;
+    private int currentAnimation = 0;
     private int x;
     private int y;
     private int speed;
@@ -30,24 +32,29 @@ public class Player {
     private static final String TAG = "Player";
 
     public Player(Context context, int screenX, int screenY) {
-        speed = 10;
-        dir = new int[4];
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.player);
+        this.speed = 10;
+        this.dir = new int[4];
+        this.sprite = new Sprite(context, R.drawable.player);
+
         //bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
-        animation = new Animation(bitmap, new int[]{9, 0, 4, 0}, 145, 220, 50, 1);
-
+        this.animation = new Animation[5];
+        this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 145, 220, 50, 0, 0);
+        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{13, 0, 4, 0}, 145, 220, 500, 1, 0);
+        this.animation[2] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 220, 500, 1, 1);
+        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 220, 500, 1, 0);
+        this.animation[4] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 220, 500, 1, 1);
         //calculating maxY
-        maxY = screenY - bitmap.getHeight();
+        this.maxY = screenY - sprite.getBitmap().getHeight();
         //top edge's y point is 0 so min y will always be zero
-        minY = 0;
+        this.minY = 0;
 
-        x = screenX / 2;
-        y = screenY / 2;
+        this.x = screenX / 2;
+        this.y = screenY / 2;
         //x = screenX / 2 - bitmap.getHeight() / 2;
         //y = screenY / 2 - bitmap.getWidth() / 2;
 
-        moving = false;
+        this.moving = false;
     }
 
     private boolean checkMovements(int[] array) {
@@ -82,34 +89,39 @@ public class Player {
             if (Math.abs(x - startX) > tileSizeX || Math.abs(y - startY) > tileSizeY) {
                 Arrays.fill(dir, 0);
                 moving = false;
+                //currentAnimation = 0;
             }
             //Log.d(TAG, "arr: " + Arrays.toString(dir));
             if (dir[0] == 1 && dir[1] == 1) { //top right
                 x += speed;
                 y -= speed;
+                currentAnimation = 1;
             }
             else if (dir[0] == 1 && dir[3] == 1) { //top left
                 x -= speed;
                 y -= speed;
+                currentAnimation = 2;
             }
             else if (dir[2] == 1 && dir[1] == 1) { //bottom right
                 x += speed;
                 y += speed;
+                currentAnimation = 3;
             }
             else if (dir[2] == 1 && dir[3] == 1) { //bottom left
                 x -= speed;
                 y += speed;
+                currentAnimation = 4;
             }
         }
     }
 
     public void draw(Canvas canvas, Paint paint) {
         //Log.d(TAG, Integer.toString(x) + ", " + Integer.toString(y));
-        animation.draw(canvas, x, y, paint);
+        animation[currentAnimation].draw(canvas, x, y, paint);
     }
 
     public Bitmap getBitmap() {
-        return bitmap;
+        return sprite.getBitmap();
     }
 
     public int getX() {
