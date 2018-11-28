@@ -10,4 +10,11 @@ public class Tile extends AbstractTile {
         this.sprite =  BitmapFactory.decodeResource(context.getResources(), R.drawable.tile);
         this.sprite = Bitmap.createScaledBitmap(sprite,100, 100, false);
     }
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+    public Bitmap getBitmap(){return sprite;}
 }
