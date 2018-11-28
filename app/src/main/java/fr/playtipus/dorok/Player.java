@@ -32,22 +32,17 @@ public class Player {
     private static final String TAG = "Player";
 
     public Player(Context context, int screenX, int screenY) {
-        this.speed = 10;
+        this.speed = 5;
         this.dir = new int[4];
         this.sprite = new Sprite(context, R.drawable.player);
-
         //bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
         this.animation = new Animation[5];
-        this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 145, 220, 50, 0, 0);
-        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{13, 0, 4, 0}, 145, 220, 500, 1, 0);
-        this.animation[2] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 220, 500, 1, 1);
-        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 220, 500, 1, 0);
-        this.animation[4] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 220, 500, 1, 1);
-        //calculating maxY
-        this.maxY = screenY - sprite.getBitmap().getHeight();
-        //top edge's y point is 0 so min y will always be zero
-        this.minY = 0;
+        this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 145, 185, 50, 0);
+        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{3, 3, 3, 0}, 145, 185, 50, 1);
+        this.animation[2] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
+        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{3, 3, 3, 0}, 145, 185, 50, 1);
+        this.animation[4] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
 
         this.x = screenX / 2;
         this.y = screenY / 2;
@@ -130,9 +125,5 @@ public class Player {
 
     public int getY() {
         return y;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 }

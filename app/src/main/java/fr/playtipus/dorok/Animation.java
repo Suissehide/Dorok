@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import android.graphics.RectF;
 import android.util.Log;
 
 public class Animation {
@@ -14,7 +15,6 @@ public class Animation {
     private long lastTime = 0;
     private int frameLength = 100;
     private int reverse;
-    private Matrix matrix;
     private int backtrace = 0;
 
     private int start_row;
@@ -30,7 +30,7 @@ public class Animation {
     private static final String TAG = "Animation";
 
     // grid 0: start_row, 1: start_col, 2:end_row, 3: end_col
-    public Animation(Bitmap bmp, int[] grid, int width, int height, int frameLength, int reverse, int mirror) {
+    public Animation(Bitmap bmp, int[] grid, int width, int height, int frameLength, int reverse) {
         this.bmp = bmp;
         this.start_row = grid[0];
         this.start_col = grid[1];
@@ -40,20 +40,9 @@ public class Animation {
         this.height = height;
         this.reverse = reverse;
         this.frameLength = frameLength;
-        this.matrix = new Matrix();
-        if (mirror == 1) {
-            matrix.preScale(-1, 1);
-        } else {
-            matrix.preScale(1, 1);
-        }
     }
 
     private void normalUpdate() {
-        if (currentFrameX * width > bmp.getWidth()) {
-            currentFrameX = 0;
-            currentFrameY = 1;
-        }
-
         if (currentFrameX < rows) {
             currentFrameX += 1;
         } else if (currentFrameY < cols) {
@@ -68,11 +57,6 @@ public class Animation {
     private void reverseUpdate() {
 
         if (backtrace == 0) {
-            if (currentFrameX * width > bmp.getWidth()) {
-                currentFrameX = 0;
-                currentFrameY = 1;
-            }
-
             if (currentFrameX < rows) {
                 currentFrameX += 1;
             } else if (currentFrameY < cols) {
