@@ -39,9 +39,9 @@ public class Player {
 
         this.animation = new Animation[5];
         this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 145, 185, 50, 0);
-        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{3, 3, 3, 0}, 145, 185, 50, 1);
+        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
         this.animation[2] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
-        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{3, 3, 3, 0}, 145, 185, 50, 1);
+        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
         this.animation[4] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
 
         this.x = screenX / 2;
@@ -52,7 +52,7 @@ public class Player {
         this.moving = false;
     }
 
-    private boolean checkMovements(int[] array) {
+    public boolean checkMovements(int[] array) {
         boolean check = false;
 
         for (int i = 0; i < 4; i ++) {
@@ -72,8 +72,6 @@ public class Player {
         int tileSizeX = 64;
         int tileSizeY = 64;
 
-        //Log.d(TAG, "X = " + dir[0] + " Y = " + dir[1]);
-
         if (checkMovements(dir) && !moving) {
             moving = true;
             startX = x;
@@ -81,6 +79,7 @@ public class Player {
         }
 
         if (moving) {
+            Log.d(TAG, "X = " + (x - startX) + " Y = " + (y - startY));
             if (Math.abs(x - startX) > tileSizeX || Math.abs(y - startY) > tileSizeY) {
                 Arrays.fill(dir, 0);
                 moving = false;
@@ -111,7 +110,6 @@ public class Player {
     }
 
     public void draw(Canvas canvas, Paint paint) {
-        //Log.d(TAG, Integer.toString(x) + ", " + Integer.toString(y));
         animation[currentAnimation].draw(canvas, x, y, paint);
     }
 
