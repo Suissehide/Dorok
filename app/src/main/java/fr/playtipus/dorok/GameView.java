@@ -8,24 +8,20 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 import java.util.Arrays;
-import java.util.List;
 
 import android.util.Log;
+
+import fr.playtipus.dorok.GameEngine.GameEngine;
 
 public class GameView extends SurfaceView implements Runnable {
 
     volatile boolean playing;
-
     long fps;
     private long timeThisFrame;
 
     private Thread gameThread = null;
-    public static final String mPath = "test.txt";
-    private Readfiles mReadfiles;
-    private List<String> mLines;
+    private GameEngine gameEngine;
 
-    private Player player;
-    private Map map;
     private Paint paint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
@@ -37,12 +33,7 @@ public class GameView extends SurfaceView implements Runnable {
     public GameView(Context context, int screenX, int screenY) {
         super(context);
 
-        //mReadfiles = new Readfiles(this);
-        //mLines = mReadfiles.readLine(mPath);
-        //for (String string : mLines)
-         //   Log.d(TAG, string);
-        player = new Player(context, screenX, screenY);
-        map = new Map(context, screenX, screenY);
+        gameEngine = new GameEngine(context, screenX, screenY);
 
         //initializing drawing objects
         surfaceHolder = getHolder();
@@ -70,7 +61,11 @@ public class GameView extends SurfaceView implements Runnable {
 
 
     private void update() {
-        player.update();
+        //Log.d(TAG, "Val=" + dir[0] + dir[1] + dir[2] + dir[3]);
+        gameEngine.update(dir);
+
+        //reset dir
+        Arrays.fill(dir, 0);
     }
 
     private void draw() {
@@ -80,11 +75,8 @@ public class GameView extends SurfaceView implements Runnable {
             canvas = surfaceHolder.lockCanvas();
             //drawing a background color for canvas
             canvas.drawColor(Color.BLACK);
-            //drawing the map
-            map.drawMap(canvas, paint);
-            //Drawing the player
-            player.draw(canvas, paint);
-            //canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+
+            gameEngine.draw(canvas, paint);
 
             paint.setColor(Color.argb(255,  249, 129, 0));
             paint.setTextSize(45);
@@ -143,11 +135,6 @@ public class GameView extends SurfaceView implements Runnable {
                     Log.d(TAG, "Right to Left swipe performed");
                     dir[3] = 1;
                 }
-                player.setDir(dir);
-
-                //reset dir
-                Arrays.fill(dir, 0);
-
                 break;
 
             case MotionEvent.ACTION_DOWN:
