@@ -1,44 +1,61 @@
 package fr.playtipus.dorok;
 
 import android.content.Context;
-import android.content.SyncStatusObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Debug;
 import android.util.Log;
 import org.json.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
-
 public class Map {
-
-
-    public static final String mPath = "test.txt";
-    private Readfiles mReadfiles;
-    private List<String> mLines;
-    private static final String TAG = "GameView";
+    private List<Tile> lTiles;
+    private static final String TAG = "JsonTest";
     private Bitmap bitmap;
     private int x;
     private int y;
     private JSONObject obj ;
+
     public Map(Context context, int screenX, int screenY) {
-        mReadfiles = new Readfiles(context);
-        mLines = mReadfiles.readLine(mPath);
-        for (String string : mLines) {
-            Log.d(TAG, string);
+        InputStream ips = context.getResources().openRawResource(R.raw.test);
+        InputStreamReader ipsr = new InputStreamReader(ips);
+        StringBuilder text = new StringBuilder();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(ipsr);
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                text.append(line);
+                text.append('\n');
+            }
+        } catch (IOException e) {
+            Log.d(TAG, e.getMessage());
+            // do exception handling
+        } finally {
+            try { br.close(); } catch (Exception e) { }
+        }
+        lTiles = new ArrayList<Tile>();
             try {
-                JSONObject type = new JSONObject(string);
-                JSONArray tiles = type.getJSONArray("Tiles");
+                obj = new JSONObject(text.toString());
+                JSONArray tiles = obj.getJSONArray("Tiles");
                 for (int i=0; i< tiles.length(); i++ ) {
-                    JSONObject tile = (JSONObject) tiles.get(i);
-                    System.out.println(tile.getInt("Type"));
+                    JSONObject tile = tiles.getJSONObject(i);
+                    Tile nt = new Tile(tile.getInt("X"), tile.getInt("Y"), context, tile.getInt("Type"));
+                    lTiles.add(nt);
+                    Log.d(TAG, lTiles.size() + "");
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
         }
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
