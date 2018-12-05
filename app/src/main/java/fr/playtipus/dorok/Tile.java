@@ -9,12 +9,11 @@ public class Tile extends AbstractTile {
         super(x, y, NSprite);
         if (NSprite == 1) {
             this.sprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile);
-            this.sprite = Bitmap.createScaledBitmap(sprite, 100, 100, false);
         }
         else {
             this.sprite = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
-            this.sprite = Bitmap.createScaledBitmap(sprite, 100, 100, false);
         }
+        this.sprite = Bitmap.createScaledBitmap(sprite, 100, 100, false);
     }
     public int getNSprite() {
         return NSprite;

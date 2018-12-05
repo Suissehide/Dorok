@@ -40,7 +40,6 @@ public class Map {
             }
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
-            // do exception handling
         } finally {
             try { br.close(); } catch (Exception e) { }
         }
@@ -58,8 +57,6 @@ public class Map {
             } catch (JSONException e) {
                 e.printStackTrace();
         }
-        //Log.d(TAG, lTiles.size() + "");
-        //Log.d(TAG, size + "");
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
@@ -85,7 +82,8 @@ public class Map {
         return y;
     }
 
-    public void drawMap(Canvas canvas, Paint paint, int size, List<Tile>lTiles) {
+    public void drawMap(Canvas canvas, Paint paint) {
+        int size = this.size;
         int incTile = 0;
         int i = 0;
         int j = 0;
@@ -94,8 +92,7 @@ public class Map {
 
         while (j < size){
             while (i < size){
-                Log.d(TAG, lTiles.get(incTile).getNSprite() + "");
-                canvas.drawBitmap(lTiles.get(incTile).getBitmap(), getX() + x, getY() + y, paint);
+                canvas.drawBitmap(this.lTiles.get(incTile).getBitmap(), getX() + x, getY() + y, paint);
                 x -= 100/2;
                 y += 80/2;
                 i += 1;
