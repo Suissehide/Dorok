@@ -28,13 +28,17 @@ public class GameEngine {
     }
 
     public void update(int[] dir) {
-        player.setDir(dir);
+        //player.setDir(dir);
         player.update();
     }
 
     public void draw(Canvas canvas, Paint paint) {
+        map.drawMap(canvas, paint);
         //Drawing the player
         player.draw(canvas, paint);
-        map.drawMap(canvas, paint);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

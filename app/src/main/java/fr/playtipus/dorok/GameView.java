@@ -135,6 +135,7 @@ public class GameView extends SurfaceView implements Runnable {
                     Log.d(TAG, "Right to Left swipe performed");
                     dir[3] = 1;
                 }
+                gameEngine.getPlayer().setDir(dir);
                 break;
 
             case MotionEvent.ACTION_DOWN:
