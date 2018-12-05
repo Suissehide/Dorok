@@ -21,6 +21,7 @@ public class Map {
     private int x;
     private int y;
     private JSONObject obj ;
+    private int size;
 
     public Map(Context context, int screenX, int screenY) {
         InputStream ips = context.getResources().openRawResource(R.raw.test);
@@ -46,17 +47,19 @@ public class Map {
         lTiles = new ArrayList<Tile>();
             try {
                 obj = new JSONObject(text.toString());
+                size = obj.getInt("Size");
                 JSONArray tiles = obj.getJSONArray("Tiles");
                 for (int i=0; i< tiles.length(); i++ ) {
                     JSONObject tile = tiles.getJSONObject(i);
                     Tile nt = new Tile(tile.getInt("X"), tile.getInt("Y"), context, tile.getInt("Type"));
                     lTiles.add(nt);
-                    Log.d(TAG, lTiles.size() + "");
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
         }
+        //Log.d(TAG, lTiles.size() + "");
+        //Log.d(TAG, size + "");
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
         bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
@@ -68,6 +71,12 @@ public class Map {
         return bitmap;
     }
 
+    public int getSize() {return size;}
+
+    public List<Tile> getlTiles() {
+        return lTiles;
+    }
+
     public int getX() {
         return x;
     }
@@ -76,19 +85,21 @@ public class Map {
         return y;
     }
 
-    public void drawMap(Canvas canvas, Paint paint) {
+    public void drawMap(Canvas canvas, Paint paint, int size, List<Tile>lTiles) {
+        int incTile = 0;
         int i = 0;
         int j = 0;
-        int size = 1;
         int x = 0;
         int y = 80 *  (-(size - 1)/2);
 
         while (j < size){
             while (i < size){
-                canvas.drawBitmap(getBitmap(), getX() + x, getY() + y, paint);
+                Log.d(TAG, lTiles.get(incTile).getNSprite() + "");
+                canvas.drawBitmap(lTiles.get(incTile).getBitmap(), getX() + x, getY() + y, paint);
                 x -= 100/2;
                 y += 80/2;
                 i += 1;
+                incTile += 1;
             }
             i = 0;
             j += 1;
