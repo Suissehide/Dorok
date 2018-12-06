@@ -16,6 +16,7 @@ public class Animation {
     private int frameLength = 100;
     private int reverse;
     private int backtrace = 0;
+    private int paused = 0;
 
     private int start_row;
     private int start_col;
@@ -82,7 +83,7 @@ public class Animation {
     private void update() {
         long time = System.currentTimeMillis();
 
-        if (time > lastTime + frameLength) {
+        if (time > lastTime + frameLength && paused == 0) {
             if (reverse == 0) {
                 normalUpdate();
             } else {
@@ -105,5 +106,13 @@ public class Animation {
     public void reset() {
         currentFrameX = 0;
         currentFrameY = 0;
+    }
+
+    public void pause() {
+        this.paused = 1;
+    }
+
+    public void run() {
+        this.paused = 0;
     }
 }

@@ -12,9 +12,14 @@ import fr.playtipus.dorok.Sprite;
 public class Villager extends Monsters {
 
     public Villager(Context context, int x, int y) {
-        this.sprite = new Sprite(context, R.drawable.player);
+        this.sprite = new Sprite(context, R.drawable.player2);
         this.animation = new Animation[5];
         this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 145, 185, 50, 0);
+        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
+        this.animation[2] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
+        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
+        this.animation[4] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
+
         this.pm = 1;
         this.lives = 1;
         this.moving = false;
@@ -25,8 +30,8 @@ public class Villager extends Monsters {
     }
 
     private void movement(int[] dir) {
-        int tileSizeX = 64; //temporary
-        int tileSizeY = 64; //temporary
+        int tileSizeX = 48; //temporary
+        int tileSizeY = 48; //temporary
 
         if (Math.abs(x - startX) > tileSizeX || Math.abs(y - startY) > tileSizeY) {
             moving = false;
@@ -51,7 +56,7 @@ public class Villager extends Monsters {
         }
     }
 
-    void update(Player player, int[] dir) {
+    public void update(Player player, int[] dir) {
         if (checkMovements(dir) && !moving) {
             moving = true;
             startX = x;
@@ -63,7 +68,7 @@ public class Villager extends Monsters {
         }
     }
 
-    void draw(Canvas canvas, Paint paint) {
+    public void draw(Canvas canvas, Paint paint) {
         animation[currentAnimation].draw(canvas, x, y, paint);
     }
 }

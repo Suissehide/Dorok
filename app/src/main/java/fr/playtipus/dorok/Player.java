@@ -34,15 +34,15 @@ public class Player {
     public Player(Context context, int screenX, int screenY) {
         this.speed = 5;
         this.dir = new int[4];
-        this.sprite = new Sprite(context, R.drawable.player);
+        this.sprite = new Sprite(context, R.drawable.player2);
         //bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
 
         this.animation = new Animation[5];
-        this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 145, 185, 50, 0);
-        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
-        this.animation[2] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
-        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
-        this.animation[4] = new Animation(sprite.getBitmap(), new int[]{9, 0, 4, 0}, 145, 185, 50, 1);
+        this.animation[0] = new Animation(sprite.getBitmap(), new int[]{2, 0, 0, 0}, 117, 165, 50, 0);
+        this.animation[1] = new Animation(sprite.getBitmap(), new int[]{0, 3, 4, 0}, 117, 165, 50, 1);
+        this.animation[2] = new Animation(sprite.getBitmap(), new int[]{0, 1, 4, 0}, 117, 165, 50, 1);
+        this.animation[3] = new Animation(sprite.getBitmap(), new int[]{0, 2, 4, 0}, 117, 165, 50, 1);
+        this.animation[4] = new Animation(sprite.getBitmap(), new int[]{0, 0, 4, 0}, 117, 165, 50, 1);
 
         this.x = screenX / 2;
         this.y = screenY / 2;
@@ -83,9 +83,8 @@ public class Player {
             if (Math.abs(x - startX) > tileSizeX || Math.abs(y - startY) > tileSizeY) {
                 Arrays.fill(dir, 0);
                 moving = false;
-                //currentAnimation = 0;
             }
-            //Log.d(TAG, "arr: " + Arrays.toString(dir));
+            animation[currentAnimation].run();
             if (dir[0] == 1 && dir[1] == 1) { //top right
                 x += speed;
                 y -= speed;
@@ -106,6 +105,8 @@ public class Player {
                 y += speed;
                 currentAnimation = 4;
             }
+        } else {
+            animation[currentAnimation].pause();
         }
     }
 
