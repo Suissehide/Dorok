@@ -64,45 +64,23 @@ public class Map {
         y = screenY / 2 - bitmap.getWidth() / 2;
 
     }
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
 
-    public int getSize() {return size;}
+    public void drawMap(Canvas canvas, Paint paint) {
+        int incTile = 0;
+        int i = 0;
+        int x;
+        int y;
+        while (i < lTiles.size()){
+            x = this.lTiles.get(incTile).getX() * 50 + this.x;
+            y = this.lTiles.get(incTile).getY() * 40 + this.y;
+            canvas.drawBitmap(this.lTiles.get(incTile).getBitmap(), x, y, paint);
+            i += 1;
+            incTile += 1;
+        }
+    }
 
     public List<Tile> getlTiles() {
         return lTiles;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void drawMap(Canvas canvas, Paint paint) {
-        int size = this.size;
-        int incTile = 0;
-        int i = 0;
-        int j = 0;
-        int x = 0;
-        int y = 80 *  (-(size - 1)/2);
-
-        while (j < size){
-            while (i < size){
-                canvas.drawBitmap(this.lTiles.get(incTile).getBitmap(), getX() + x, getY() + y, paint);
-                x -= 100/2;
-                y += 80/2;
-                i += 1;
-                incTile += 1;
-            }
-            i = 0;
-            j += 1;
-            x = j * 100/2;
-            y = 80 * (-(size-1)/2) + j * 80/2;
-        }
     }
 }
 
