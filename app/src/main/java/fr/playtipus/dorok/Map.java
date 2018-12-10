@@ -21,9 +21,35 @@ public class Map {
     private int x;
     private int y;
     private JSONObject obj ;
-    private int size;
 
     public Map(Context context, int screenX, int screenY) {
+        StringBuilder text = ReadText(context);
+        lTiles = FillList(text, context);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
+        bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
+
+        x = screenX / 2 - bitmap.getHeight() / 2;
+        y = screenY / 2 - bitmap.getWidth() / 2;
+
+    }
+    private List<Tile> FillList(StringBuilder text, Context context) {
+    lTiles = new ArrayList<Tile>();
+            try {
+                obj = new JSONObject(text.toString());
+                JSONArray tiles = obj.getJSONArray("Tiles");
+                for (int i=0; i< tiles.length(); i++ ) {
+                    JSONObject tile = tiles.getJSONObject(i);
+                    Tile nt = new Tile(tile.getInt("X"), tile.getInt("Y"), context, tile.getInt("Type"));
+                    lTiles.add(nt);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+        }
+        return lTiles ;
+    }
+
+    private StringBuilder ReadText(Context context) {
         InputStream ips = context.getResources().openRawResource(R.raw.test);
         InputStreamReader ipsr = new InputStreamReader(ips);
         StringBuilder text = new StringBuilder();
@@ -43,26 +69,7 @@ public class Map {
         } finally {
             try { br.close(); } catch (Exception e) { }
         }
-        lTiles = new ArrayList<Tile>();
-            try {
-                obj = new JSONObject(text.toString());
-                size = obj.getInt("Size");
-                JSONArray tiles = obj.getJSONArray("Tiles");
-                for (int i=0; i< tiles.length(); i++ ) {
-                    JSONObject tile = tiles.getJSONObject(i);
-                    Tile nt = new Tile(tile.getInt("X"), tile.getInt("Y"), context, tile.getInt("Type"));
-                    lTiles.add(nt);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-        }
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tile2);
-        bitmap = Bitmap.createScaledBitmap(bitmap,100, 100, false);
-
-        x = screenX / 2 - bitmap.getHeight() / 2;
-        y = screenY / 2 - bitmap.getWidth() / 2;
-
+        return text;
     }
 
     public void drawMap(Canvas canvas, Paint paint) {
